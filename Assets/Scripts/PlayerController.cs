@@ -4,20 +4,37 @@ using UnityEngine;
 
 //Properties must be serialized in order to be viewed in the browser
 [System.Serializable]
-public class Boundary {
+public class Boundary 
+{
 	public float xMin, xMax, zMin, zMax;
 }
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour 
+{
 
 	private Rigidbody rb;
+	private float nextFire;
+
 	public float speed;
 	public float tilt;
 	public Boundary boundary;
 
+	public GameObject shot;
+	public Transform shotSpawn;
+	public float fireRate;
+
 	void Start() {
 	
 		rb = GetComponent<Rigidbody> ();
+	}
+
+	void Update() 
+	{
+		// Input.getButton returns true while virtual button identified by buttonName is held down(ie: button held down while shooting a weapon)
+		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+			nextFire = Time.time + fireRate;
+			Instantiate (shot, shotSpawn.position, shotSpawn.rotation);
+		}
 	}
 
 	void FixedUpdate() 
